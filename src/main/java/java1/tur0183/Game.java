@@ -46,13 +46,16 @@ void draw(GraphicsContext gc){
 public void simulate(double deltaT){
     for (DrawableSimulable entity : entities){
         entity.simulate(deltaT);
-
     }
     Iterator<Projectile> iterator = projectiles.iterator();
     while (iterator.hasNext()) {
         Projectile projectile = iterator.next();
         projectile.simulate(deltaT);
     }
+    if(this.cavern.checkColision(this.ship)){
+        controller.endGame();
+    }
+
 }
     public void spawnProjectile() {
         Projectile projectile = new Projectile(new Point2D(this.ship.getPosition().getX(), this.ship.getPosition().getY()), new Point2D(0,-200));
