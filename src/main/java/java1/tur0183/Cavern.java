@@ -45,6 +45,10 @@ public class Cavern implements DrawableSimulable {
         yOffset -= speed * deltaT;
     }
 
+    public boolean checkColision(Ship ship){
+        return true;
+    }
+
 
 
 }

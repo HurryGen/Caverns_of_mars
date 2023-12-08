@@ -46,9 +46,7 @@ void draw(GraphicsContext gc){
 public void simulate(double deltaT){
     for (DrawableSimulable entity : entities){
         entity.simulate(deltaT);
-        if(this.ship.intersects(this.cavern)){
-            controller.endGame();
-        }
+
     }
     Iterator<Projectile> iterator = projectiles.iterator();
     while (iterator.hasNext()) {

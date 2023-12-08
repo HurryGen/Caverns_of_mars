@@ -8,9 +8,14 @@ import javafx.scene.paint.Color;
 public class Ship implements DrawableSimulable {
     private final Point2D velocity;
     private Point2D position;
+
+    private Rectangle2D hitbox; // Added hitbox
+
     public Ship(Point2D position, Point2D velocity){
         this.position = position;
         this.velocity = velocity;
+
+        this.hitbox = new Rectangle2D(position.getX()-40, position.getY()-10, 80, 30); // Adjust the dimensions accordingly
     }
 
     @Override
@@ -29,11 +34,16 @@ public class Ship implements DrawableSimulable {
         gc.fillRect(position.getX()+10,position.getY()-7, 10,13);
         gc.fillRect(position.getX()+20,position.getY()-3, 10,15);
         gc.fillRect(position.getX()+30,position.getY()+5, 10,15);
+
+
+        gc.setStroke(Color.RED); // Set the color for the hitbox
+        gc.strokeRect(hitbox.getMinX(), hitbox.getMinY(), hitbox.getWidth(), hitbox.getHeight());
     }
 
     @Override
     public void simulate(double deltaT) {
         this.position = this.position.subtract(velocity.multiply(deltaT));
+        this.hitbox = new Rectangle2D(position.getX()-40, position.getY()-10, 80, 30); // Adjust the dimensions accordingly
     }
 
     public void moveRight(){
@@ -51,6 +61,10 @@ public class Ship implements DrawableSimulable {
 
     public Point2D getPosition() {
         return position;
+    }
+
+    public Rectangle2D getHitbox() {
+        return hitbox;
     }
 
 }
