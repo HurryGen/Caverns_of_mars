@@ -13,10 +13,13 @@ public class Game {
     private final double width;
     private final double height;
     public final Ship ship;
-    public final Cavern cavern;
+    private final Cavern cavern;
+
+
 
     private DrawableSimulable[] entities ;
     private List<Projectile> projectiles;
+    private List<Fuel> fuels;
     private final GameController controller;
 public Game(GameController controller,double width, double height){
     this.controller = controller;
@@ -25,8 +28,11 @@ public Game(GameController controller,double width, double height){
     this.entities = new DrawableSimulable[]{
             ship = new Ship(new Point2D(300,100),new Point2D(0,0)),
             cavern = new Cavern(),
+
+
     };
     this.projectiles = new ArrayList<>();
+    this.fuels = this.cavern.getFuels();
 
 }
 
@@ -40,6 +46,9 @@ void draw(GraphicsContext gc){
     for (Projectile projectile : projectiles) {
         projectile.draw(gc);
     }
+    for (Fuel fuel : fuels) {
+        fuel.draw(gc);
+    }
 
 
 }
@@ -47,13 +56,26 @@ public void simulate(double deltaT){
     for (DrawableSimulable entity : entities){
         entity.simulate(deltaT);
     }
-    Iterator<Projectile> iterator = projectiles.iterator();
-    while (iterator.hasNext()) {
-        Projectile projectile = iterator.next();
+    Iterator<Projectile> projectileIterator = projectiles.iterator();
+    while (projectileIterator.hasNext()) {
+        Projectile projectile = projectileIterator.next();
         projectile.simulate(deltaT);
         if(this.cavern.checkColision(projectile)){
-            iterator.remove();
+            projectileIterator.remove();
         }
+    }
+
+    Iterator<Fuel> fuelIterator = fuels.iterator();
+    while(fuelIterator.hasNext()){
+        Fuel fuel = fuelIterator.next();
+        fuel.simulate(deltaT);
+        for (int i = 0; i < projectiles.size(); i++) {
+            if(projectiles.get(i).intersects(fuel)){
+                fuelIterator.remove();
+                projectiles.remove(i);
+            }
+        }
+
     }
     if(this.cavern.checkColision(this.ship)){
         controller.endGame();

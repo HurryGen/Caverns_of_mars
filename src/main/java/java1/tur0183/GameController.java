@@ -33,9 +33,11 @@ public class GameController {
             } else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
                 this.game.ship.moveLeft();
             } else if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
-                this.game.ship.moveDown();
+                if(this.game.ship.getBoundingBox().getMaxY() < App.CANVAS_HEIGHT-50)
+                    this.game.ship.moveDown();
             } else if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
-                this.game.ship.moveUp();
+                if(this.game.ship.getBoundingBox().getMinY() > 0)
+                    this.game.ship.moveUp();
             } else if (e.getCode() == KeyCode.SPACE) {
                 // Fire projectile when SPACE key is pressed
                 long currentTime = System.nanoTime();
