@@ -3,19 +3,20 @@ package java1.tur0183;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 
-public class Ship implements DrawableSimulable {
+public class Ship implements DrawableSimulable,Collisionable {
     private final Point2D velocity;
     private Point2D position;
 
-    private Rectangle2D hitbox; // Added hitbox
+    private Rectangle2D boundingBox; // Added boundingBox
 
     public Ship(Point2D position, Point2D velocity){
         this.position = position;
         this.velocity = velocity;
 
-        this.hitbox = new Rectangle2D(position.getX()-40, position.getY()-10, 80, 30); // Adjust the dimensions accordingly
+        this.boundingBox = new Rectangle2D(position.getX()-40, position.getY()-10, 80, 30); // Adjust the dimensions accordingly
     }
 
     @Override
@@ -36,14 +37,14 @@ public class Ship implements DrawableSimulable {
         gc.fillRect(position.getX()+30,position.getY()+5, 10,15);
 
 
-        gc.setStroke(Color.RED); // Set the color for the hitbox
-        gc.strokeRect(hitbox.getMinX(), hitbox.getMinY(), hitbox.getWidth(), hitbox.getHeight());
+        //gc.setStroke(Color.RED); // Set the color for the boundingBox
+        //gc.strokeRect(boundingBox.getMinX(), boundingBox.getMinY(), boundingBox.getWidth(), boundingBox.getHeight());
     }
 
     @Override
     public void simulate(double deltaT) {
         this.position = this.position.subtract(velocity.multiply(deltaT));
-        this.hitbox = new Rectangle2D(position.getX()-40, position.getY()-10, 80, 30); // Adjust the dimensions accordingly
+        this.boundingBox = new Rectangle2D(position.getX()-40, position.getY()-10, 80, 30); // Adjust the dimensions accordingly
     }
 
     public void moveRight(){
@@ -62,9 +63,9 @@ public class Ship implements DrawableSimulable {
     public Point2D getPosition() {
         return position;
     }
-
-    public Rectangle2D getHitbox() {
-        return hitbox;
+    @Override
+    public Rectangle2D getBoundingBox() {
+        return boundingBox;
     }
 
 }

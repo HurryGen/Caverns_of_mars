@@ -46,13 +46,13 @@ public class Cavern implements DrawableSimulable {
         yOffset -= speed * deltaT;
     }
 
-    public boolean checkColision(Ship ship){
+    public boolean checkColision(Collisionable collisionable){
         PixelReader pixelReader = mapImage.getPixelReader();
         double xRatio = mapImage.getWidth()/App.CANVAS_WIDTH;
         double yRatio = mapImage.getHeight()/(App.CANVAS_WIDTH/(mapImage.getWidth() / mapImage.getHeight()));
 
-        for (double x = ship.getHitbox().getMinX(); x < ship.getHitbox().getMaxX(); x++) {
-            for (double y = ship.getHitbox().getMinY(); y < ship.getHitbox().getMaxY(); y++) {
+        for (double x = collisionable.getBoundingBox().getMinX(); x < collisionable.getBoundingBox().getMaxX(); x++) {
+            for (double y = collisionable.getBoundingBox().getMinY(); y < collisionable.getBoundingBox().getMaxY(); y++) {
                 int xx = (int) (x*xRatio);
                 int yy = (int) ((y-yOffset)*yRatio);
                 Color pixelColor = pixelReader.getColor(xx, yy);
@@ -63,6 +63,8 @@ public class Cavern implements DrawableSimulable {
         }
         return false;
     }
+
+
 
 
 

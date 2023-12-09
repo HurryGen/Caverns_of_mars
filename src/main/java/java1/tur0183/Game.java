@@ -51,6 +51,9 @@ public void simulate(double deltaT){
     while (iterator.hasNext()) {
         Projectile projectile = iterator.next();
         projectile.simulate(deltaT);
+        if(this.cavern.checkColision(projectile)){
+            iterator.remove();
+        }
     }
     if(this.cavern.checkColision(this.ship)){
         controller.endGame();
@@ -58,8 +61,10 @@ public void simulate(double deltaT){
 
 }
     public void spawnProjectile() {
-        Projectile projectile = new Projectile(new Point2D(this.ship.getPosition().getX(), this.ship.getPosition().getY()), new Point2D(0,-200));
-        projectiles.add(projectile);
+        Projectile projectile1 = new Projectile(new Point2D(this.ship.getPosition().getX()-40, this.ship.getPosition().getY()+15), new Point2D(0,-200));
+        Projectile projectile2 = new Projectile(new Point2D(this.ship.getPosition().getX()+30, this.ship.getPosition().getY()+15), new Point2D(0,-200));
+        projectiles.add(projectile1);
+        projectiles.add(projectile2);
     }
 
 }
