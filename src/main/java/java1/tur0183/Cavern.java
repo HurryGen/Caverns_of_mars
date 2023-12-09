@@ -18,14 +18,17 @@ import java.util.Random;
 public class Cavern implements DrawableSimulable {
 
     private double yOffset; // Vertical offset
-    private Image mapImage = new Image(getClass().getResourceAsStream("map.png"));
+    private Image mapImage = new Image(getClass().getResourceAsStream("map_v2.png"));
 
     private List<Fuel> fuels;
+    private List<Rocket> rockets;
 
     public Cavern(){
         this.yOffset = 0;
         this.fuels = new ArrayList<>();
+        this.rockets = new ArrayList<>();
         generateFuels();
+        generateRockets();
 
     }
 
@@ -55,6 +58,28 @@ public class Cavern implements DrawableSimulable {
         yOffset -= speed * deltaT;
 
     }
+
+    public boolean checkColision(Collisionable collisionable){
+        PixelReader pixelReader = mapImage.getPixelReader();
+        double xRatio = mapImage.getWidth()/App.CANVAS_WIDTH;
+        double yRatio = mapImage.getHeight()/(App.CANVAS_WIDTH/(mapImage.getWidth() / mapImage.getHeight()));
+
+        for (double x = collisionable.getBoundingBox().getMinX(); x < collisionable.getBoundingBox().getMaxX(); x++) {
+            for (double y = collisionable.getBoundingBox().getMinY(); y < collisionable.getBoundingBox().getMaxY(); y++) {
+                int xx = (int) (x*xRatio);
+                int yy = (int) ((y-yOffset)*yRatio);
+                Color pixelColor = pixelReader.getColor(xx, yy);
+                if (pixelColor.equals(Color.BLACK)){
+                    return false;
+                }
+                else if (pixelColor.getOpacity() > 0) {
+                    return true; // Collision detected
+                }
+            }
+        }
+        return false;
+    }
+
     private void generateFuels() {
         PixelReader pixelReader = mapImage.getPixelReader();
         double aspectRatio = mapImage.getWidth() / mapImage.getHeight();
@@ -68,33 +93,41 @@ public class Cavern implements DrawableSimulable {
 
                 // Check for red pixels
                 if (pixelColor.equals(Color.RED)) {
-                    Point2D fuelPosition = new Point2D(xx, yy+2);
-                    Fuel fuel = new Fuel(fuelPosition, new Point2D(0, 80));
+                    Fuel fuel = new Fuel(new Point2D(xx, yy+2), new Point2D(0, 80));
                     fuels.add(fuel);
                 }
             }
         }
     }
-
-    public boolean checkColision(Collisionable collisionable){
+    private void generateRockets() {
         PixelReader pixelReader = mapImage.getPixelReader();
-        double xRatio = mapImage.getWidth()/App.CANVAS_WIDTH;
-        double yRatio = mapImage.getHeight()/(App.CANVAS_WIDTH/(mapImage.getWidth() / mapImage.getHeight()));
+        double aspectRatio = mapImage.getWidth() / mapImage.getHeight();
+        double destinationHeight = App.CANVAS_WIDTH / aspectRatio;
 
-        for (double x = collisionable.getBoundingBox().getMinX(); x < collisionable.getBoundingBox().getMaxX(); x++) {
-            for (double y = collisionable.getBoundingBox().getMinY(); y < collisionable.getBoundingBox().getMaxY(); y++) {
-                int xx = (int) (x*xRatio);
-                int yy = (int) ((y-yOffset)*yRatio);
-                Color pixelColor = pixelReader.getColor(xx, yy);
-                if (pixelColor.getOpacity() > 0) {
-                    return true; // Collision detected
+        for (int x = 0; x < mapImage.getWidth(); x++) {
+            for (int y = 0; y < mapImage.getHeight(); y++) {
+                int xx = (int) (x*(App.CANVAS_WIDTH/ mapImage.getWidth()));
+                int yy = (int) (y*(destinationHeight/ mapImage.getHeight()));
+                Color pixelColor = pixelReader.getColor(x, y);
+
+                // Check for red pixels
+                if (pixelColor.equals(Color.BLACK)) {
+                    Rocket rocket = new Rocket(new Point2D(xx, yy+2), new Point2D(0, 80));
+                    rockets.add(rocket);
                 }
             }
         }
-        return false;
     }
 
     public List<Fuel> getFuels() {
         return fuels;
+    }
+
+    public List<Rocket> getRockets() {
+        return rockets;
+    }
+
+    public double getYOffset() {
+        return yOffset;
     }
 }

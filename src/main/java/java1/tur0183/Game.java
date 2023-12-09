@@ -20,6 +20,7 @@ public class Game {
     private DrawableSimulable[] entities ;
     private List<Projectile> projectiles;
     private List<Fuel> fuels;
+    private List<Rocket> rockets;
     private final GameController controller;
 public Game(GameController controller,double width, double height){
     this.controller = controller;
@@ -33,6 +34,7 @@ public Game(GameController controller,double width, double height){
     };
     this.projectiles = new ArrayList<>();
     this.fuels = this.cavern.getFuels();
+    this.rockets = this.cavern.getRockets();
 
 }
 
@@ -49,12 +51,18 @@ void draw(GraphicsContext gc){
     for (Fuel fuel : fuels) {
         fuel.draw(gc);
     }
+    for (Rocket rocket : rockets) {
+        rocket.draw(gc);
+    }
 
 
 }
 public void simulate(double deltaT){
     for (DrawableSimulable entity : entities){
         entity.simulate(deltaT);
+    }
+    if(this.cavern.checkColision(this.ship)){
+        controller.endGame();
     }
     Iterator<Projectile> projectileIterator = projectiles.iterator();
     while (projectileIterator.hasNext()) {
@@ -75,11 +83,16 @@ public void simulate(double deltaT){
                 projectiles.remove(i);
             }
         }
+    }
+    Iterator<Rocket> rocketIterator = rockets.iterator();
+    while(rocketIterator.hasNext()){
+        Rocket rocket = rocketIterator.next();
+        rocket.simulate(deltaT);
+        if((rocket.getPosition().getY() + this.cavern.getYOffset()) < App.CANVAS_HEIGHT){
+            rocket.fly();
+        }
+    }
 
-    }
-    if(this.cavern.checkColision(this.ship)){
-        controller.endGame();
-    }
 
 }
     public void spawnProjectile() {
