@@ -34,4 +34,8 @@ public class Projectile implements DrawableSimulable,Collisionable {
     public Rectangle2D getBoundingBox() {
         return boundingBox;
     }
+
+    public Point2D getPosition() {
+        return position;
+    }
 }

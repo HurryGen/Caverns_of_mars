@@ -22,6 +22,9 @@ public class Game {
     private List<Fuel> fuels;
     private List<Rocket> rockets;
     private final GameController controller;
+    private long lastTime; // To control firing rate
+    private static final long DELAY = 250_000_000;
+    private int points = 0;
 public Game(GameController controller,double width, double height){
     this.controller = controller;
     this.width = width;
@@ -40,6 +43,7 @@ public Game(GameController controller,double width, double height){
 
 
 void draw(GraphicsContext gc){
+    gc.setFont(javafx.scene.text.Font.font(20));
     gc.setFill(Color.BLACK);
     gc.fillRect(0, 0, width, height);
     for (DrawableSimulable entity : entities){
@@ -54,10 +58,18 @@ void draw(GraphicsContext gc){
     for (Rocket rocket : rockets) {
         rocket.draw(gc);
     }
+    gc.setFill(Color.WHITE);
+    gc.fillText("Points: " + points, 0,20);
+    gc.fillText("Fuel: " + this.ship.getFuel(), 0,40);
 
 
 }
 public void simulate(double deltaT){
+    long currentTime = System.nanoTime();
+    if(currentTime - lastTime >= DELAY){
+        points += 10;
+        lastTime = currentTime;
+    }
     for (DrawableSimulable entity : entities){
         entity.simulate(deltaT);
     }
@@ -71,6 +83,9 @@ public void simulate(double deltaT){
         if(this.cavern.checkColision(projectile)){
             projectileIterator.remove();
         }
+        if(projectile.getPosition().getY() >= App.CANVAS_HEIGHT){
+            projectileIterator.remove();
+        }
     }
 
     Iterator<Fuel> fuelIterator = fuels.iterator();
@@ -81,6 +96,8 @@ public void simulate(double deltaT){
             if(projectiles.get(i).intersects(fuel)){
                 fuelIterator.remove();
                 projectiles.remove(i);
+                this.ship.setFuel(this.ship.getFuel()+100);
+                points += 80;
             }
         }
     }
@@ -88,9 +105,23 @@ public void simulate(double deltaT){
     while(rocketIterator.hasNext()){
         Rocket rocket = rocketIterator.next();
         rocket.simulate(deltaT);
-        if((rocket.getPosition().getY() + this.cavern.getYOffset()) < App.CANVAS_HEIGHT){
+        if(rocket.getPosition().getY() < App.CANVAS_HEIGHT){
             rocket.fly();
         }
+        if(rocket.intersects(this.ship)){
+            controller.endGame();
+        }
+        for (int i = 0; i < projectiles.size(); i++) {
+            if(projectiles.get(i).intersects(rocket)){
+                rocketIterator.remove();
+                projectiles.remove(i);
+                this.ship.setFuel(this.ship.getFuel()+80);
+                points += 150;
+            }
+        }
+    }
+    if(this.ship.getFuel() < 0){
+        controller.endGame();
     }
 
 

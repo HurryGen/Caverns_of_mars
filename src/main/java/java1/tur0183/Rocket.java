@@ -36,7 +36,7 @@ public class Rocket implements DrawableSimulable, Collisionable {
     }
     @Override
     public Rectangle2D getBoundingBox() {
-        return null;
+        return boundingBox;
     }
 
     public Point2D getPosition() {
@@ -46,4 +46,5 @@ public class Rocket implements DrawableSimulable, Collisionable {
     public void fly(){
         velocity = new Point2D(0, 200);
     }
+
 }

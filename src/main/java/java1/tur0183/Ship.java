@@ -10,13 +10,17 @@ public class Ship implements DrawableSimulable,Collisionable {
     private final Point2D velocity;
     private Point2D position;
 
-    private Rectangle2D boundingBox; // Added boundingBox
+    private Rectangle2D boundingBox;
+    private long lastTime; // To control firing rate
+    private static final long DELAY = 500_000_000;// Added boundingBox
+    private int fuel;
 
     public Ship(Point2D position, Point2D velocity){
         this.position = position;
         this.velocity = velocity;
 
         this.boundingBox = new Rectangle2D(position.getX()-40, position.getY()-10, 80, 30); // Adjust the dimensions accordingly
+        this.fuel = 1000;
     }
 
     @Override
@@ -45,6 +49,11 @@ public class Ship implements DrawableSimulable,Collisionable {
     public void simulate(double deltaT) {
         this.position = this.position.subtract(velocity.multiply(deltaT));
         this.boundingBox = new Rectangle2D(position.getX()-40, position.getY()-10, 80, 30); // Adjust the dimensions accordingly
+        long currentTime = System.nanoTime();
+        if(currentTime - lastTime >= DELAY){
+            this.fuel -= 20;
+            lastTime = currentTime;
+        }
     }
 
     public void moveRight(){
@@ -68,4 +77,11 @@ public class Ship implements DrawableSimulable,Collisionable {
         return boundingBox;
     }
 
+    public int getFuel() {
+        return fuel;
+    }
+
+    public void setFuel(int fuel) {
+        this.fuel = fuel;
+    }
 }
