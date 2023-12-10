@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java1.tur0183.GameController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java1_2023_tur0183.GameController">
    <children>
       <Canvas fx:id="canvas" height="475.0" width="800.0" />
       <Button layoutX="310.0"  fx:id="startButton" layoutY="218.0" mnemonicParsing="false" onAction="#startGame" prefHeight="40.0" prefWidth="180.0" text="Start" />

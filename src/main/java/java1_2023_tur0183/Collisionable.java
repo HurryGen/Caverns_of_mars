@@ -1,6 +1,5 @@
-package java1.tur0183;
+package java1_2023_tur0183;
 
-import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 
 public interface Collisionable {
