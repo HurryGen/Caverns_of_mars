@@ -19,7 +19,7 @@ import java.util.Random;
 
 public class Cavern implements DrawableSimulable {
 
-    private double yOffset; // Vertical offset
+    private double yOffset;
     private Image mapImage = new Image(getClass().getResourceAsStream("map_v2.png"));
 
     private List<Fuel> fuels;
@@ -42,10 +42,10 @@ public class Cavern implements DrawableSimulable {
         double aspectRatio = mapImage.getWidth() / mapImage.getHeight();
         double destinationHeight = App.CANVAS_WIDTH / aspectRatio;
         gc.drawImage(mapImage,
-                0, 0, // source coordinates
-                mapImage.getWidth(), mapImage.getHeight(), // width and height of the source
-                0, yOffset, // destination coordinates
-                App.CANVAS_WIDTH , destinationHeight // destination width and height
+                0, 0,
+                mapImage.getWidth(), mapImage.getHeight(),
+                0, yOffset,
+                App.CANVAS_WIDTH , destinationHeight
         );
 
 
@@ -54,7 +54,7 @@ public class Cavern implements DrawableSimulable {
 
     @Override
     public void simulate(double deltaT) {
-        double speed = 80.0; // Adjust this value to control the speed of movement
+        double speed = 80.0;
 
 
         yOffset -= speed * deltaT;
@@ -75,7 +75,7 @@ public class Cavern implements DrawableSimulable {
                     return false;
                 } else if (pixelColor.getOpacity() > 0) {
 
-                    return true; // Collision detected
+                    return true;
                 }
             }
         }
@@ -93,7 +93,7 @@ public class Cavern implements DrawableSimulable {
                 int yy = (int) (y*(destinationHeight/ mapImage.getHeight()));
                 Color pixelColor = pixelReader.getColor(x, y);
 
-                // Check for red pixels
+
                 if (pixelColor.equals(Color.RED)) {
                     Fuel fuel = new Fuel(new Point2D(xx, yy+2), new Point2D(0, 80));
                     fuels.add(fuel);
@@ -112,7 +112,7 @@ public class Cavern implements DrawableSimulable {
                 int yy = (int) (y*(destinationHeight/ mapImage.getHeight()));
                 Color pixelColor = pixelReader.getColor(x, y);
 
-                // Check for red pixels
+
                 if (pixelColor.equals(Color.BLACK)) {
                     Rocket rocket = new Rocket(new Point2D(xx, yy+2), new Point2D(0, 80));
                     rockets.add(rocket);

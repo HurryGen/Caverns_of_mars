@@ -48,7 +48,7 @@ public class Ship implements DrawableSimulable,Collisionable {
     @Override
     public void simulate(double deltaT) {
         this.position = this.position.subtract(velocity.multiply(deltaT));
-        this.boundingBox = new Rectangle2D(position.getX()-40, position.getY()-10, 80, 30); // Adjust the dimensions accordingly
+        this.boundingBox = new Rectangle2D(position.getX()-40, position.getY()-10, 80, 30);
         long currentTime = System.nanoTime();
         if(currentTime - lastTime >= DELAY){
             this.fuel -= 20;

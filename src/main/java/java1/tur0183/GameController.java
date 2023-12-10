@@ -26,7 +26,7 @@ public class GameController {
     private Game game;
 
     private String playerName;
-    private long lastFireTime; // To control firing rate
+    private long lastFireTime;
     private static final long FIRE_DELAY = 500_000_000;
     public GameController(){}
 
@@ -72,7 +72,6 @@ public class GameController {
                 if(this.game.ship.getBoundingBox().getMinY() > 0)
                     this.game.ship.moveUp();
             } else if (e.getCode() == KeyCode.SPACE) {
-                // Fire projectile when SPACE key is pressed
                 long currentTime = System.nanoTime();
                 if (currentTime - lastFireTime >= FIRE_DELAY) {
                     this.game.spawnProjectile();
