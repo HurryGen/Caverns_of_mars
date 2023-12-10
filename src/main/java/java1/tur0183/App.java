@@ -33,7 +33,6 @@ public class App extends Application {
         stage.setResizable(false);
         stage.show();
         controller = fxmlLoader.getController();
-        controller.startGame();
     }
 
 

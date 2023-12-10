@@ -61,6 +61,7 @@ void draw(GraphicsContext gc){
     gc.setFill(Color.WHITE);
     gc.fillText("Points: " + points, 0,20);
     gc.fillText("Fuel: " + this.ship.getFuel(), 0,40);
+    gc.fillText("Player: " + this.controller.getPlayerName(), 0,60);
 
 
 }
@@ -133,4 +134,7 @@ public void simulate(double deltaT){
         projectiles.add(projectile2);
     }
 
+    public int getPoints() {
+        return points;
+    }
 }

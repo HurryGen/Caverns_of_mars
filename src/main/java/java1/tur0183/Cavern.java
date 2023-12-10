@@ -1,9 +1,11 @@
 package java1.tur0183;
 
 
+import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -71,8 +73,8 @@ public class Cavern implements DrawableSimulable {
                 Color pixelColor = pixelReader.getColor(xx, yy);
                 if (pixelColor.equals(Color.BLACK)){
                     return false;
-                }
-                else if (pixelColor.getOpacity() > 0) {
+                } else if (pixelColor.getOpacity() > 0) {
+
                     return true; // Collision detected
                 }
             }
