@@ -1,5 +1,7 @@
 package java1_2023_tur0183;
 
+import java1_2023_tur0183.entities.Player;
+import java1_2023_tur0183.entities.Score;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -11,6 +13,7 @@ import javafx.scene.input.KeyCode;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 public class GameController {
     @FXML
@@ -40,6 +43,7 @@ public class GameController {
         playerName = textField.getText();
     }
 
+
     public void endGame(){
         timer.stop();
         Platform.runLater(() -> {
@@ -57,6 +61,30 @@ public class GameController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        App.em.getTransaction().begin();
+        List<Player> players = App.em.createQuery("SELECT p FROM Player p WHERE p.name = :name", Player.class)
+                .setParameter("name", playerName).getResultList();
+
+        if(players.size() > 0){
+            Player player = players.get(0);
+            Score score = new Score();
+            score.setPlayer(player);
+            score.setScore(this.game.getPoints());
+            App.em.persist(score);
+        }
+        else{
+            Player player = new Player();
+            Score score = new Score();
+            player.setName(playerName);
+            score.setPlayer(player);
+            score.setScore(this.game.getPoints());
+            App.em.persist(player);
+            App.em.persist(score);
+        }
+        App.em.getTransaction().commit();
+
+
 
     }
     public void  initialize(){
